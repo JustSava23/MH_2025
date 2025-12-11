@@ -8,6 +8,6 @@
 #ifndef LIB_PERIPHERIES_GPIO_USER_GPIO_H_
 #define LIB_PERIPHERIES_GPIO_USER_GPIO_H_
 
-
+volatile extern uint8_t flg_blue_btn_pressed;
 
 #endif /* LIB_PERIPHERIES_GPIO_USER_GPIO_H_ */
