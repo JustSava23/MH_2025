@@ -5,11 +5,15 @@
  *      Author: lazar
  */
 #include "stm32f4xx.h"
+
 #include "user_main.h"
 #include "peripheries/timer/timer.h"
 #include "peripheries/gpio/user_gpio.h"
+#include "peripheries/encoder/encoder.h"
+
 #include "tim.h"
 #include "usart.h"
+
 #include <string.h>
 
 
@@ -32,24 +36,38 @@ user_main()
 	// Pokreni tajmer da broji
 	HAL_TIM_Base_Start_IT(&htim4);
 
+	// Pokreni encoderski interfejs
+	HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
+	HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
+	encoders_init();
 	/* While petlja */
 
-	uint8_t msg[] = "Please send dt for blink!\n\r";
-	HAL_UART_Transmit(&huart2, msg, strlen(msg), HAL_MAX_DELAY);
+//	uint8_t msg[] = "Please send dt for blink!\n\r";
+//	HAL_UART_Transmit(&huart2, msg, strlen(msg), HAL_MAX_DELAY);
+//	uint8_t data = 10;
+//	set_timeout_ms(data * 10);
 
-	uint8_t data = 10;
+	uint8_t enc_msg[30] = {0};
+	int32_t enc1_delta = 0;
+	int32_t enc2_delta = 0;
 
-	set_timeout_ms(data * 10);
 	while (1)
 	{
 
-		HAL_UART_Receive(&huart2, &data, 1, 5);
-
-		if (timeout_flags.timeout_end)
-		{
-			GPIOA->ODR ^= (1 << 5);
-			set_timeout_ms(data * 10);
-		}
+		user_delay_ms(200);
+//
+//		enc1_delta = encoder1_get_delta_inc();
+//		enc2_delta = encoder2_get_delta_inc();
+//
+//		sprintf(enc_msg, "ENC 1: %d  ENC 2: %d\n\r", enc1_delta, enc2_delta);
+//		HAL_UART_Transmit(&huart2, enc_msg, strlen(enc_msg), HAL_MAX_DELAY);
+//		HAL_UART_Receive(&huart2, &data, 1, 5);
+//
+//		if (timeout_flags.timeout_end)
+//		{
+//			GPIOA->ODR ^= (1 << 5);
+//			set_timeout_ms(data * 10);
+//		}
 
 //		switch (current_state) {
 //		case NO_BLINK:

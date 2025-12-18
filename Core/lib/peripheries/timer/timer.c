@@ -8,11 +8,10 @@
 #include "stm32f4xx_hal_tim.h"
 #include "timer.h"
 
+#include "module/odom/odom.h"
 
 volatile uint32_t sys_ms = 0;
-
 volatile uint32_t timeout_ms = 0;
-
 volatile FlgTimeouts_TypeDef timeout_flags = {0};
 
 
@@ -39,6 +38,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	if (htim->Instance == TIM4)
 	{
 		sys_ms++;
+
+
+		if ((sys_ms % 10) == 0)
+			odom_update();
+
 
 		if (timeout_flags.timeout_start)
 		{
